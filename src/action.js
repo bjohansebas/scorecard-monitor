@@ -38,7 +38,8 @@ async function run () {
   const positiveThreshold = rawPositiveThreshold === 'false' ? null : parseFloat(rawPositiveThreshold)
   const rawNegativeThreshold = core.getInput('negative-threshold')
   const negativeThreshold = rawNegativeThreshold === 'false' ? null : parseFloat(rawNegativeThreshold)
-
+  core.info(`Using positive-threshold: ${positiveThreshold === null ? 'disabled' : positiveThreshold}`)
+  core.info(`Using negative-threshold: ${negativeThreshold === null ? 'disabled' : negativeThreshold}`)
   const availableReportTools = ['scorecard-visualizer', 'deps.dev']
   if (!availableReportTools.includes(reportTool)) {
     throw new Error(`The report-tool is not valid, please use: ${availableReportTools.join(', ')}`)

@@ -148,6 +148,7 @@ const generateScores = async ({ scope, database: currentDatabase, maxRequestInPa
         const diff = scoreChangeThreshold(score, storedScore.score, positiveThreshold, negativeThreshold)
 
         if (diff !== null) {
+          core.info(`Score change detected for ${platform}/${org}/${repo}: ${storedScore.score} -> ${score} (diff: ${diff})`)
           scoreData.currentDiff = diff
         }
       }
