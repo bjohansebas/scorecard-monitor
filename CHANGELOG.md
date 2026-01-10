@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.0.0](https://github.com/ossf/scorecard-monitor/compare/v2.0.0-beta8...v2.0.0) (2026-01-10)
+
+
+### Features
+
+* add positive and negative threshold inputs for score evaluation ([4c3d2c2](https://github.com/ossf/scorecard-monitor/commits/4c3d2c25671dbdf261771079bc4e906776d4e1ba))
+* add positive and negative thresholds for score change evaluation ([c28e620](https://github.com/ossf/scorecard-monitor/commits/c28e6206c66fc292dbfc1bab10311fdf8c24742f))
+* enhance scoreChangeThreshold to handle null thresholds and update action inputs ([6d02980](https://github.com/ossf/scorecard-monitor/commits/6d02980d859ad2e2c7c189c010712778bae48551))
+
+
+### Other
+
+* **deps-dev:** bump js-yaml from 3.14.1 to 3.14.2 ([#94](https://github.com/ossf/scorecard-monitor/issues/94)) ([cb91954](https://github.com/ossf/scorecard-monitor/commits/cb91954708f21afe79afe1726cfb11af3955a751))
+* **deps:** bump brace-expansion from 1.1.11 to 1.1.12 ([#95](https://github.com/ossf/scorecard-monitor/issues/95)) ([f5de7cd](https://github.com/ossf/scorecard-monitor/commits/f5de7cd29e44005e337cd46109becad152f325ae))
+
 ## [1.0.1](https://github.com/ossf/scorecard-monitor/compare/v1.0.0...v1.0.1) (2023-02-15)
 
 ### Other
