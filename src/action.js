@@ -105,10 +105,10 @@ async function run () {
 
   // PROCESS
   core.info('Generating scores...')
-  const { reportContent, issueContent, database: newDatabaseState } = await generateScores({ scope, database, maxRequestInParallel, reportTagsEnabled, renderBadge, reportTool, positiveThreshold, negativeThreshold })
+  const { reportContent, issueContent, database: newDatabaseState, scores } = await generateScores({ scope, database, maxRequestInParallel, reportTagsEnabled, renderBadge, reportTool, positiveThreshold, negativeThreshold })
 
   core.info('Checking database changes...')
-  const hasChanges = isDifferent(database, newDatabaseState)
+  const hasChanges = isDifferent(database, newDatabaseState) || scores.filter(score => score.currentDiff !== undefined).length
 
   if (!hasChanges) {
     core.info('No changes to database, skipping the rest of the process')
@@ -118,14 +118,17 @@ async function run () {
   // Save changes
   core.info('Saving changes to database and report')
   await writeFile(databasePath, JSON.stringify(newDatabaseState, null, 2))
-  await writeFile(reportPath, reportTagsEnabled
-    ? updateOrCreateSegment({
-      original: originalReportContent,
-      replacementSegment: reportContent,
-      startTag,
-      endTag
-    })
-    : reportContent)
+  
+  if (reportContent) {
+    await writeFile(reportPath, reportTagsEnabled
+      ? updateOrCreateSegment({
+        original: originalReportContent,
+        replacementSegment: reportContent,
+        startTag,
+        endTag
+      })
+      : reportContent)
+  }
 
   if (discoveryEnabled) {
     core.info('Saving changes to scope...')
