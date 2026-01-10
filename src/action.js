@@ -36,8 +36,10 @@ async function run () {
 
   const rawPositiveThreshold = core.getInput('positive-threshold')
   const positiveThreshold = rawPositiveThreshold === 'false' ? null : parseFloat(rawPositiveThreshold)
+  console.log('Positive Threshold:', positiveThreshold)
   const rawNegativeThreshold = core.getInput('negative-threshold')
   const negativeThreshold = rawNegativeThreshold === 'false' ? null : parseFloat(rawNegativeThreshold)
+  console.log('Negative Threshold:', negativeThreshold)
 
   const availableReportTools = ['scorecard-visualizer', 'deps.dev']
   if (!availableReportTools.includes(reportTool)) {
