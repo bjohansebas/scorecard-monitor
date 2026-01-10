@@ -35,8 +35,10 @@ async function run () {
   const reportTool = core.getInput('report-tool') || 'scorecard-visualizer'
 
   const rawPositiveThreshold = core.getInput('positive-threshold')
+  core.info(`Raw positive-threshold input: ${rawPositiveThreshold}`)
   const positiveThreshold = rawPositiveThreshold === 'false' ? null : parseFloat(rawPositiveThreshold)
   const rawNegativeThreshold = core.getInput('negative-threshold')
+  core.info(`Raw negative-threshold input: ${core.getInput('negative-threshold')}`)
   const negativeThreshold = rawNegativeThreshold === 'false' ? null : parseFloat(rawNegativeThreshold)
   core.info(`Using positive-threshold: ${positiveThreshold === null ? 'disabled' : positiveThreshold}`)
   core.info(`Using negative-threshold: ${negativeThreshold === null ? 'disabled' : negativeThreshold}`)
