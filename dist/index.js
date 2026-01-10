@@ -47644,7 +47644,7 @@ const generateScores = async ({ scope, database: currentDatabase, maxRequestInPa
   // SET OUTPUTS
   core.setOutput('scores', scores)
 
-  return { reportContent, issueContent, database }
+  return { reportContent, issueContent, database, scores }
 }
 
 module.exports = {
@@ -47714,15 +47714,23 @@ const generateReportUrl = reportTool => (org, repo, commit, prevCommit) => {
 
 const generateReportContent = async ({ scores, reportTagsEnabled, renderBadge, reportTool }) => {
   core.debug('Generating report content')
+  const scoresInScope = scores.filter(({ currentDiff }) => currentDiff)
+  
+  if (!scoresInScope.length) {
+    core.debug('No score changes detected, skipping report generation')
+    return null
+  }
+
   const template = await readFile(__nccwpck_require__.ab + "report.ejs", 'utf8')
   const getReportUrl = generateReportUrl(reportTool)
-  return ejs.render(template, { scores, reportTagsEnabled, renderBadge, getReportUrl })
+  return ejs.render(template, { scores: scoresInScope, reportTagsEnabled, renderBadge, getReportUrl })
 }
 
 const generateIssueContent = async ({ scores, renderBadge, reportTool }) => {
   core.debug('Generating issue content')
   const scoresInScope = scores.filter(({ currentDiff }) => currentDiff)
   if (!scoresInScope.length) {
+    core.debug('No score changes detected, skipping issue content generation')
     return null
   }
   const template = await readFile(__nccwpck_require__.ab + "issue.ejs", 'utf8')
@@ -49829,10 +49837,10 @@ async function run () {
 
   // PROCESS
   core.info('Generating scores...')
-  const { reportContent, issueContent, database: newDatabaseState } = await generateScores({ scope, database, maxRequestInParallel, reportTagsEnabled, renderBadge, reportTool, positiveThreshold, negativeThreshold })
+  const { reportContent, issueContent, database: newDatabaseState, scores } = await generateScores({ scope, database, maxRequestInParallel, reportTagsEnabled, renderBadge, reportTool, positiveThreshold, negativeThreshold })
 
   core.info('Checking database changes...')
-  const hasChanges = isDifferent(database, newDatabaseState)
+  const hasChanges = isDifferent(database, newDatabaseState) || scores.filter(score => score.currentDiff !== undefined).length
 
   if (!hasChanges) {
     core.info('No changes to database, skipping the rest of the process')
@@ -49842,14 +49850,17 @@ async function run () {
   // Save changes
   core.info('Saving changes to database and report')
   await writeFile(databasePath, JSON.stringify(newDatabaseState, null, 2))
-  await writeFile(reportPath, reportTagsEnabled
-    ? updateOrCreateSegment({
-      original: originalReportContent,
-      replacementSegment: reportContent,
-      startTag,
-      endTag
-    })
-    : reportContent)
+  
+  if (reportContent) {
+    await writeFile(reportPath, reportTagsEnabled
+      ? updateOrCreateSegment({
+        original: originalReportContent,
+        replacementSegment: reportContent,
+        startTag,
+        endTag
+      })
+      : reportContent)
+  }
 
   if (discoveryEnabled) {
     core.info('Saving changes to scope...')
