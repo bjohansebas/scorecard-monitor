@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.1.0](https://github.com/ossf/scorecard-monitor/compare/v2.0.0...v2.1.0) (2026-01-10)
+
+
+### Features
+
+* rename threshold inputs to use hyphenated format and add logging for threshold values ([5861b4b](https://github.com/ossf/scorecard-monitor/commits/5861b4bad48f1658c4fce73bca5988b68e27527b))
+
 ## [2.0.0](https://github.com/ossf/scorecard-monitor/compare/v2.0.0-beta8...v2.0.0) (2026-01-10)
 
 
